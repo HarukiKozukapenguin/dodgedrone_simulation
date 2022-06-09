@@ -89,6 +89,7 @@ struct QuadState {
   void q(const Quaternion quaternion);
   void q(const Scalar angle, const Vector<3>& axis = Vector<3>::UnitZ());
   Matrix<3, 3> R() const;
+  // Vector<3> Euler() const;
 
   void setZero(const bool& reset_time = true);
   void linearize();
