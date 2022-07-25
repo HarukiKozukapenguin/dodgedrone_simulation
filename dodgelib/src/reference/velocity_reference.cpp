@@ -11,9 +11,10 @@ VelocityReference::VelocityReference(const QuadState& state,
     update_from_estimate_(update_from_estimate),
     yaw_last_(start_state_.getYaw()),
     timeout_(timeout) {    
-    std::cout << "update_from_estimate_ is " << 
-    std::boolalpha << update_from_estimate_ << std::endl;
+    // std::cout << "update_from_estimate_ is " << 
+    // std::boolalpha << update_from_estimate_ << std::endl;
     }
+    // false by simulator
 
 
 Setpoint VelocityReference::getSetpoint(const QuadState& state,
@@ -62,7 +63,7 @@ void VelocityReference::updateTo(const QuadState& state) {
     const Scalar dt = state.t - start_state_.t;
     start_state_.t = state.t;
     // start_state_.p += dt * v_;
-    start_state_.p += p_;
+    start_state_.p = p_;
     start_state_.v = v_;
     yaw_last_ += dt * yaw_rate_;
     start_state_.q(yaw_last_);
