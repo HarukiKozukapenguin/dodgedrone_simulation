@@ -10,7 +10,10 @@ VelocityReference::VelocityReference(const QuadState& state,
   : ReferenceBase(state.getHoverState(), INF, "Velocity Reference"),
     update_from_estimate_(update_from_estimate),
     yaw_last_(start_state_.getYaw()),
-    timeout_(timeout) {}
+    timeout_(timeout) {    
+    std::cout << "update_from_estimate_ is " << 
+    std::boolalpha << update_from_estimate_ << std::endl;
+    }
 
 
 Setpoint VelocityReference::getSetpoint(const QuadState& state,
@@ -28,7 +31,7 @@ Setpoint VelocityReference::getSetpoint(const QuadState& state,
 
     setpoint.state = start_state_;
     setpoint.state.t = t_query;
-    setpoint.state.p += dt * v_;
+    setpoint.state.p = p_;
     setpoint.state.v = v_;
     setpoint.state.q(yaw_last_ + dt * yaw_rate_);
     setpoint.state.w.z() = yaw_rate_;
@@ -58,7 +61,8 @@ void VelocityReference::updateTo(const QuadState& state) {
   } else {
     const Scalar dt = state.t - start_state_.t;
     start_state_.t = state.t;
-    start_state_.p += dt * v_;
+    // start_state_.p += dt * v_;
+    start_state_.p += p_;
     start_state_.v = v_;
     yaw_last_ += dt * yaw_rate_;
     start_state_.q(yaw_last_);
@@ -66,10 +70,12 @@ void VelocityReference::updateTo(const QuadState& state) {
   }
 }
 
-bool VelocityReference::update(const Vector<3>& velocity,
+bool VelocityReference::update( const Vector<3>& position,
+                              const Vector<3>& velocity,
                                const Scalar yaw_rate) {
   if (!velocity.allFinite() || !std::isfinite(yaw_rate)) return false;
 
+  p_ = position;
   v_ = velocity;
   yaw_rate_ = yaw_rate;
   t_last_update_ = start_state_.t;

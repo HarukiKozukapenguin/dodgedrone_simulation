@@ -201,8 +201,10 @@ void RosPilot::goToPoseCallback(const geometry_msgs::PoseStampedConstPtr& msg) {
 }
 
 void RosPilot::velocityCallback(
-  const geometry_msgs::TwistStampedConstPtr& msg) {
-  pilot_.setVelocityReference(fromRosVec3(msg->twist.linear),
+  const dodgeros_msgs::VelCommandConstPtr& msg) {
+  pilot_.setVelocityReference(
+                              fromRosVec3(msg->position),
+                              fromRosVec3(msg->twist.linear),
                               msg->twist.angular.z);
 }
 

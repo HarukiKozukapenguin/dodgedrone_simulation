@@ -13,10 +13,12 @@ class VelocityReference : public ReferenceBase {
 
   virtual Setpoint getSetpoint(const QuadState& state, const Scalar t) override;
 
-  bool update(const Vector<3>& velocity, const Scalar yaw_rate);
+  bool update(const Vector<3>& position, const Vector<3>& velocity, const Scalar yaw_rate);
 
   virtual bool isVelocityRefernce() const override { return true; }
   virtual bool isAbsolute() const override { return false; }
+
+  Vector<3> p_ = Vector<3>::Zero();
 
  private:
   void updateTo(const QuadState& state);
@@ -31,3 +33,4 @@ class VelocityReference : public ReferenceBase {
 };
 
 }  // namespace agi
+

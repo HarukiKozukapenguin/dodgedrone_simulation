@@ -60,11 +60,12 @@ bool Pilot::addHover(const Vector<3>& hover_pos, Scalar yaw, Scalar start_time,
   return true;
 }
 
-bool Pilot::setVelocityReference(const Vector<3>& velocity,
+bool Pilot::setVelocityReference(const Vector<3>& position,
+                                const Vector<3>& velocity,
                                  const Scalar yaw_rate) {
   static std::shared_ptr<VelocityReference> reference;
   if (isInVelocityReference()) {
-    if (!reference->update(velocity, yaw_rate)) {
+    if (!reference->update(position, velocity, yaw_rate)) {
       logger_.warn("Could not update velocity reference!");
       return false;
     }
@@ -86,7 +87,7 @@ bool Pilot::setVelocityReference(const Vector<3>& velocity,
     }
 
     reference = std::make_shared<VelocityReference>(state);
-    reference->update(velocity, yaw_rate);
+    reference->update(position, velocity, yaw_rate);
     pipeline_.appendReference(reference);
   }
 

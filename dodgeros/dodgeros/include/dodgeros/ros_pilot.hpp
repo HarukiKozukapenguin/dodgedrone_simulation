@@ -15,6 +15,9 @@
 #include "dodgeros/ros_traj_visualizer.hpp"
 #include "dodgeros_msgs/Command.h"
 #include "dodgeros_msgs/Reference.h"
+
+#include "dodgeros_msgs/VelCommand.h"
+
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/TwistStamped.h"
 #include "mav_msgs/Actuators.h"
@@ -49,7 +52,7 @@ class RosPilot {
   void startCallback(const std_msgs::EmptyConstPtr& msg);
   void forceHoverCallback(const std_msgs::EmptyConstPtr& msg);
   void goToPoseCallback(const geometry_msgs::PoseStampedConstPtr& msg);
-  void velocityCallback(const geometry_msgs::TwistStampedConstPtr& msg);
+  void velocityCallback(const dodgeros_msgs::VelCommandConstPtr& msg);
   void landCallback(const std_msgs::EmptyConstPtr& msg);
   void offCallback(const std_msgs::EmptyConstPtr& msg);
   void enableCallback(const std_msgs::BoolConstPtr& msg);
