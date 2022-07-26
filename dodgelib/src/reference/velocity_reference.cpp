@@ -14,7 +14,8 @@ VelocityReference::VelocityReference(const QuadState& state,
     // std::cout << "update_from_estimate_ is " << 
     // std::boolalpha << update_from_estimate_ << std::endl;
     }
-    // false by simulator
+    // update_from_estimate_ == false
+    // timeout == 1.0
 
 
 Setpoint VelocityReference::getSetpoint(const QuadState& state,
@@ -28,13 +29,15 @@ Setpoint VelocityReference::getSetpoint(const QuadState& state,
     updateTo(state);
     setpoint.state = start_state_;
   } else {  // .. or if prediction requested.
-    const Scalar dt = t_query - start_state_.t;
+    // const Scalar dt = t_query - start_state_.t;
 
     setpoint.state = start_state_;
     setpoint.state.t = t_query;
     setpoint.state.p = p_;
     setpoint.state.v = v_;
-    setpoint.state.q(yaw_last_ + dt * yaw_rate_);
+    // setpoint.state.q(yaw_last_ + dt * yaw_rate_);
+    setpoint.state.q(yaw_last_ + yaw_rate_);
+    // yaw_rate is diff of desired yaw
     setpoint.state.w.z() = yaw_rate_;
   }
 
@@ -60,12 +63,13 @@ void VelocityReference::updateTo(const QuadState& state) {
     start_state_.v = v_;
     start_state_.w.z() = yaw_rate_;
   } else {
-    const Scalar dt = state.t - start_state_.t;
+    // const Scalar dt = state.t - start_state_.t;
     start_state_.t = state.t;
     // start_state_.p += dt * v_;
     start_state_.p = p_;
     start_state_.v = v_;
-    yaw_last_ += dt * yaw_rate_;
+    // yaw_last_ += dt * yaw_rate_;
+    yaw_last_ = yaw_rate_;
     start_state_.q(yaw_last_);
     start_state_.w = Vector<3>(0.0, 0.0, yaw_rate_);
   }
